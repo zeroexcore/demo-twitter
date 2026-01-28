@@ -84,10 +84,14 @@ async function takeScreenshots() {
       });
       procs.push(apiProc);
 
-      // Start Web server  
+      // Start Web server (with API port for proxy)
       const webProc = spawn("pnpm", ["vite", "--port", WEB_PORT.toString()], {
         cwd: "apps/web",
         stdio: "pipe",
+        env: {
+          ...process.env,
+          VITE_API_PORT: API_PORT.toString(),
+        },
       });
       procs.push(webProc);
 
@@ -95,7 +99,25 @@ async function takeScreenshots() {
       await waitForServer(`http://localhost:${API_PORT}`);
       console.log("  API ready");
       await waitForServer(`http://localhost:${WEB_PORT}`);
-      console.log("  Web ready\n");
+      console.log("  Web ready");
+      
+      // Wait for API to return tweets (database might take a moment)
+      let retries = 0;
+      while (retries < 10) {
+        try {
+          const res = await fetch(`http://localhost:${API_PORT}/timeline/public`);
+          const data = await res.json() as { tweets: unknown[] };
+          if (data.tweets && data.tweets.length > 0) {
+            console.log(`  API has ${data.tweets.length} tweets\n`);
+            break;
+          }
+        } catch { /* ignore */ }
+        retries++;
+        await new Promise(r => setTimeout(r, 1000));
+      }
+      if (retries >= 10) {
+        console.log("  Warning: No tweets in API, screenshots may be empty\n");
+      }
     }
 
     console.log(`Taking screenshots from ${baseUrl}...\n`);
@@ -107,8 +129,8 @@ async function takeScreenshots() {
 
       try {
         await page.goto(`${baseUrl}${shot.path}`, {
-          waitUntil: "domcontentloaded",
-          timeout: 10000,
+          waitUntil: "networkidle",
+          timeout: 15000,
         });
         
         // Set dark mode if needed
@@ -120,7 +142,16 @@ async function takeScreenshots() {
           await page.waitForTimeout(500);
         }
         
-        await page.waitForTimeout(1500); // Wait for React to render
+        // Wait for tweets to load (look for tweet cards)
+        if (shot.path === "/") {
+          try {
+            await page.waitForSelector("article", { timeout: 5000 });
+          } catch {
+            console.log(`  Warning: No tweets found for ${shot.name}`);
+          }
+        }
+        
+        await page.waitForTimeout(1000); // Extra time for rendering
 
         await page.screenshot({
           path: `${outDir}/${shot.name}.png`,
