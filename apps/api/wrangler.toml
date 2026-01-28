@@ -1,19 +1,19 @@
 name = "demo-twitter-api"
 main = "src/index.ts"
 compatibility_date = "2024-12-30"
+account_id = "733c505809a0c09542a27ef2923e895f"
+
+# Custom domain route
+routes = [
+  { pattern = "twitter-demo-api.oxc.dev", custom_domain = true }
+]
 
 [vars]
-ENVIRONMENT = "development"
+ENVIRONMENT = "production"
 
 # D1 Database
 [[d1_databases]]
 binding = "DB"
 database_name = "demo-twitter-db"
-database_id = "local-dev-db"
+database_id = "6cf0c91c-1135-416b-b89b-0690aab9059e"
 migrations_dir = "src/db/migrations"
-
-# For production, create a D1 database and update:
-# [env.production.d1_databases]
-# binding = "DB"
-# database_name = "demo-twitter-db"
-# database_id = "your-production-db-id"
