@@ -8,7 +8,13 @@
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:migrate": "wrangler d1 migrations apply demo-twitter-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply demo-twitter-db --remote",
+    "db:seed": "wrangler d1 execute demo-twitter-db --local --file=src/db/seed.sql",
+    "db:seed:prod": "wrangler d1 execute demo-twitter-db --remote --file=src/db/seed.sql",
+    "db:setup": "pnpm db:migrate && pnpm db:seed",
+    "db:studio": "wrangler d1 studio demo-twitter-db --local"
   },
   "dependencies": {
     "@demo-twitter/types": "workspace:*",
