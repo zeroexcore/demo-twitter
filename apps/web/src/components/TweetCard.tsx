@@ -35,24 +35,20 @@ export default function TweetCard({ tweet }: TweetCardProps) {
     },
   });
 
+  // Generate avatar URL using DiceBear
+  const avatarUrl = tweet.avatar_url || 
+    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(tweet.username)}&backgroundColor=3b82f6&textColor=ffffff`;
+
   return (
-    <article className="border-b border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50">
+    <article className="border-b border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:hover:bg-gray-800/50">
       <div className="flex gap-3">
         {/* Avatar */}
         <Link to={`/${tweet.username}`} className="flex-shrink-0">
-          <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
-            {tweet.avatar_url ? (
-              <img
-                src={tweet.avatar_url}
-                alt={tweet.display_name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-primary-100 text-primary-600 font-semibold">
-                {tweet.display_name.charAt(0).toUpperCase()}
-              </div>
-            )}
-          </div>
+          <img
+            src={avatarUrl}
+            alt={tweet.display_name}
+            className="h-10 w-10 rounded-full bg-gray-200 object-cover dark:bg-gray-700"
+          />
         </Link>
 
         {/* Content */}
@@ -61,20 +57,20 @@ export default function TweetCard({ tweet }: TweetCardProps) {
           <div className="flex items-center gap-1 text-sm">
             <Link
               to={`/${tweet.username}`}
-              className="truncate font-semibold text-gray-900 hover:underline"
+              className="truncate font-semibold text-gray-900 hover:underline dark:text-gray-100"
             >
               {tweet.display_name}
             </Link>
             <Link
               to={`/${tweet.username}`}
-              className="truncate text-gray-500 hover:underline"
+              className="truncate text-gray-500 hover:underline dark:text-gray-400"
             >
               @{tweet.username}
             </Link>
-            <span className="text-gray-400">·</span>
+            <span className="text-gray-400 dark:text-gray-600">·</span>
             <Link
               to={`/tweet/${tweet.id}`}
-              className="text-gray-500 hover:underline"
+              className="text-gray-500 hover:underline dark:text-gray-400"
             >
               {formatDate(tweet.created_at)}
             </Link>
@@ -82,7 +78,7 @@ export default function TweetCard({ tweet }: TweetCardProps) {
 
           {/* Tweet Content */}
           <Link to={`/tweet/${tweet.id}`}>
-            <p className="mt-1 whitespace-pre-wrap break-words text-gray-900">
+            <p className="mt-1 whitespace-pre-wrap break-words text-gray-900 dark:text-gray-100">
               {tweet.content}
             </p>
           </Link>
@@ -92,7 +88,7 @@ export default function TweetCard({ tweet }: TweetCardProps) {
             {/* Reply (placeholder) */}
             <button
               type="button"
-              className="flex items-center gap-1 text-gray-500 hover:text-primary-600"
+              className="flex items-center gap-1 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
               disabled
             >
               <MessageCircle className="h-4 w-4" />
@@ -107,8 +103,8 @@ export default function TweetCard({ tweet }: TweetCardProps) {
               className={cn(
                 "flex items-center gap-1 transition-colors",
                 tweet.retweeted_by_me
-                  ? "text-green-600"
-                  : "text-gray-500 hover:text-green-600",
+                  ? "text-green-600 dark:text-green-500"
+                  : "text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-500",
                 !isAuthenticated && "cursor-not-allowed opacity-50"
               )}
             >
@@ -125,7 +121,7 @@ export default function TweetCard({ tweet }: TweetCardProps) {
                 "flex items-center gap-1 transition-colors",
                 tweet.liked_by_me
                   ? "text-red-500"
-                  : "text-gray-500 hover:text-red-500",
+                  : "text-gray-500 hover:text-red-500 dark:text-gray-400",
                 !isAuthenticated && "cursor-not-allowed opacity-50"
               )}
             >

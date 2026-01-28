@@ -6,11 +6,23 @@ import { spawn, ChildProcess } from "child_process";
 const WEB_PORT = 35173;
 const API_PORT = 38787;
 
-const SCREENSHOTS = [
+interface Screenshot {
+  name: string;
+  path: string;
+  viewport: { width: number; height: number };
+  darkMode?: boolean;
+}
+
+const SCREENSHOTS: Screenshot[] = [
+  // Light mode
   { name: "home", path: "/", viewport: { width: 1280, height: 800 } },
   { name: "home-mobile", path: "/", viewport: { width: 375, height: 667 } },
   { name: "login", path: "/login", viewport: { width: 1280, height: 800 } },
   { name: "register", path: "/register", viewport: { width: 1280, height: 800 } },
+  // Dark mode
+  { name: "home-dark", path: "/", viewport: { width: 1280, height: 800 }, darkMode: true },
+  { name: "home-mobile-dark", path: "/", viewport: { width: 375, height: 667 }, darkMode: true },
+  { name: "login-dark", path: "/login", viewport: { width: 1280, height: 800 }, darkMode: true },
 ];
 
 function startServer(command: string, args: string[], cwd: string, port: number): Promise<ChildProcess> {
@@ -98,6 +110,16 @@ async function takeScreenshots() {
           waitUntil: "domcontentloaded",
           timeout: 10000,
         });
+        
+        // Set dark mode if needed
+        if (shot.darkMode) {
+          await page.evaluate(() => {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("demo-twitter-theme", JSON.stringify({ state: { theme: "dark" }, version: 0 }));
+          });
+          await page.waitForTimeout(500);
+        }
+        
         await page.waitForTimeout(1500); // Wait for React to render
 
         await page.screenshot({
@@ -105,7 +127,8 @@ async function takeScreenshots() {
           fullPage: false,
         });
 
-        console.log(`✓ ${shot.name}.png (${shot.viewport.width}x${shot.viewport.height})`);
+        const mode = shot.darkMode ? " (dark)" : "";
+        console.log(`✓ ${shot.name}.png (${shot.viewport.width}x${shot.viewport.height})${mode}`);
       } catch (err) {
         console.error(`✗ ${shot.name}: ${err}`);
       }

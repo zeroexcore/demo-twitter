@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Home, User, LogOut, LogIn } from "lucide-react";
 import { useAuthStore } from "../stores/auth";
 import { cn } from "../lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,22 +18,23 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/80">
         <div className="container-app flex h-14 items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-primary-600">
+          <Link to="/" className="text-xl font-bold text-primary-600 dark:text-primary-400">
             Demo Twitter
           </Link>
 
           <nav className="flex items-center gap-2">
+            <ThemeToggle />
             {isAuthenticated ? (
               <>
                 <Link
                   to="/home"
                   className={cn(
                     "flex items-center gap-2 rounded-full px-4 py-2",
-                    "text-gray-700 hover:bg-gray-100"
+                    "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
                   )}
                 >
                   <Home className="h-5 w-5" />
@@ -42,7 +44,7 @@ export default function Layout({ children }: LayoutProps) {
                   to={`/${user?.username}`}
                   className={cn(
                     "flex items-center gap-2 rounded-full px-4 py-2",
-                    "text-gray-700 hover:bg-gray-100"
+                    "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
                   )}
                 >
                   <User className="h-5 w-5" />
@@ -53,7 +55,7 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={handleLogout}
                   className={cn(
                     "flex items-center gap-2 rounded-full px-4 py-2",
-                    "text-gray-700 hover:bg-gray-100"
+                    "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
                   )}
                 >
                   <LogOut className="h-5 w-5" />
@@ -81,24 +83,24 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Mobile Bottom Nav */}
       {isAuthenticated && (
-        <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 sm:hidden">
           <div className="flex justify-around py-2">
             <Link
               to="/home"
-              className="flex flex-col items-center p-2 text-gray-600"
+              className="flex flex-col items-center p-2 text-gray-600 dark:text-gray-400"
             >
               <Home className="h-6 w-6" />
             </Link>
             <Link
               to={`/${user?.username}`}
-              className="flex flex-col items-center p-2 text-gray-600"
+              className="flex flex-col items-center p-2 text-gray-600 dark:text-gray-400"
             >
               <User className="h-6 w-6" />
             </Link>
             <button
               type="button"
               onClick={handleLogout}
-              className="flex flex-col items-center p-2 text-gray-600"
+              className="flex flex-col items-center p-2 text-gray-600 dark:text-gray-400"
             >
               <LogOut className="h-6 w-6" />
             </button>
