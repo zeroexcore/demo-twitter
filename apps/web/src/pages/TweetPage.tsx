@@ -23,14 +23,14 @@ export default function TweetPage() {
 
   if (error || !data?.tweet) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white p-8 text-center">
-        <h2 className="text-xl font-bold text-gray-900">Tweet not found</h2>
-        <p className="mt-2 text-gray-600">
+      <div className="rounded-xl border border-gray-200 bg-white p-8 text-center dark:border-gray-800 dark:bg-gray-900">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Tweet not found</h2>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">
           This tweet may have been deleted.
         </p>
         <Link
           to="/"
-          className="mt-4 inline-block text-primary-600 hover:underline"
+          className="mt-4 inline-block text-primary-600 hover:underline dark:text-primary-400"
         >
           Go back home
         </Link>
@@ -39,16 +39,16 @@ export default function TweetPage() {
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden dark:border-gray-800 dark:bg-gray-900">
       {/* Header */}
-      <div className="sticky top-14 z-10 flex items-center gap-4 border-b border-gray-200 bg-white/80 backdrop-blur-sm p-4">
+      <div className="sticky top-14 z-10 flex items-center gap-4 border-b border-gray-200 bg-white/80 backdrop-blur-sm p-4 dark:border-gray-800 dark:bg-gray-900/80">
         <Link
           to="/"
-          className="rounded-full p-2 hover:bg-gray-100"
+          className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5 text-gray-900 dark:text-gray-100" />
         </Link>
-        <h1 className="text-xl font-bold">Tweet</h1>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Tweet</h1>
       </div>
 
       {/* Tweet */}

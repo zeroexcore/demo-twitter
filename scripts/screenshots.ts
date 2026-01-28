@@ -14,15 +14,15 @@ interface Screenshot {
 }
 
 const SCREENSHOTS: Screenshot[] = [
-  // Light mode
-  { name: "home", path: "/", viewport: { width: 1280, height: 800 } },
-  { name: "home-mobile", path: "/", viewport: { width: 375, height: 667 } },
-  { name: "login", path: "/login", viewport: { width: 1280, height: 800 } },
-  { name: "register", path: "/register", viewport: { width: 1280, height: 800 } },
-  // Dark mode
-  { name: "home-dark", path: "/", viewport: { width: 1280, height: 800 }, darkMode: true },
-  { name: "home-mobile-dark", path: "/", viewport: { width: 375, height: 667 }, darkMode: true },
-  { name: "login-dark", path: "/login", viewport: { width: 1280, height: 800 }, darkMode: true },
+  // Light mode (v2 - fixed theme support)
+  { name: "timeline-light-v2", path: "/", viewport: { width: 1280, height: 800 } },
+  { name: "timeline-mobile-light-v2", path: "/", viewport: { width: 375, height: 667 } },
+  { name: "login-light-v2", path: "/login", viewport: { width: 1280, height: 800 } },
+  { name: "register-light-v2", path: "/register", viewport: { width: 1280, height: 800 } },
+  // Dark mode (v2 - fixed theme support)
+  { name: "timeline-dark-v2", path: "/", viewport: { width: 1280, height: 800 }, darkMode: true },
+  { name: "timeline-mobile-dark-v2", path: "/", viewport: { width: 375, height: 667 }, darkMode: true },
+  { name: "login-dark-v2", path: "/login", viewport: { width: 1280, height: 800 }, darkMode: true },
 ];
 
 function startServer(command: string, args: string[], cwd: string, port: number): Promise<ChildProcess> {

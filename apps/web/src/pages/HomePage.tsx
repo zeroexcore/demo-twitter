@@ -28,10 +28,10 @@ export default function HomePage() {
   const tweets = data?.pages.flatMap((page) => page.tweets) ?? [];
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden dark:border-gray-800 dark:bg-gray-900">
       {/* Header */}
-      <div className="sticky top-14 z-10 border-b border-gray-200 bg-white/80 backdrop-blur-sm p-4">
-        <h1 className="text-xl font-bold">
+      <div className="sticky top-14 z-10 border-b border-gray-200 bg-white/80 backdrop-blur-sm p-4 dark:border-gray-800 dark:bg-gray-900/80">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
           {isAuthenticated ? "Home" : "Explore"}
         </h1>
       </div>
