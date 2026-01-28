@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: 59 130 246;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+/* Mobile-first responsive design */
+@layer utilities {
+  .container-app {
+    @apply mx-auto max-w-2xl px-4;
+  }
+}
