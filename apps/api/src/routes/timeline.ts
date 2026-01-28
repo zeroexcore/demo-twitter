@@ -2,6 +2,14 @@ import { Hono } from "hono";
 import type { Env, Variables } from "../types";
 import { authMiddleware } from "../middleware/auth";
 
+// Helper to parse images JSON from tweet records
+function parseTweetImages(tweets: Record<string, unknown>[]) {
+  return tweets.map((tweet) => ({
+    ...tweet,
+    images: tweet.images ? JSON.parse(tweet.images as string) : [],
+  }));
+}
+
 export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
   // Get public timeline (all recent tweets)
   .get("/public", async (c) => {
@@ -10,7 +18,8 @@ export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>(
     const db = c.env.DB;
 
     let query = `
-      SELECT t.*, u.username, u.display_name, u.avatar_url,
+      SELECT t.id, t.user_id, t.content, t.images, t.created_at, t.updated_at,
+             u.username, u.display_name, u.avatar_url,
              (SELECT COUNT(*) FROM likes WHERE tweet_id = t.id) as like_count,
              (SELECT COUNT(*) FROM retweets WHERE tweet_id = t.id) as retweet_count
       FROM tweets t
@@ -30,7 +39,7 @@ export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>(
     const results = await db
       .prepare(query)
       .bind(...params)
-      .all();
+      .all<Record<string, unknown>>();
 
     const tweets = results.results || [];
     const hasMore = tweets.length > limit;
@@ -39,7 +48,7 @@ export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>(
       ? (items[items.length - 1] as { created_at: string }).created_at
       : null;
 
-    return c.json({ tweets: items, nextCursor });
+    return c.json({ tweets: parseTweetImages(items), nextCursor });
   })
   // Get home timeline (tweets from followed users) - protected
   .get("/home", authMiddleware, async (c) => {
@@ -49,7 +58,8 @@ export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>(
     const db = c.env.DB;
 
     let query = `
-      SELECT t.*, u.username, u.display_name, u.avatar_url,
+      SELECT t.id, t.user_id, t.content, t.images, t.created_at, t.updated_at,
+             u.username, u.display_name, u.avatar_url,
              (SELECT COUNT(*) FROM likes WHERE tweet_id = t.id) as like_count,
              (SELECT COUNT(*) FROM retweets WHERE tweet_id = t.id) as retweet_count,
              EXISTS(SELECT 1 FROM likes WHERE tweet_id = t.id AND user_id = ?) as liked_by_me,
@@ -75,7 +85,7 @@ export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>(
     const results = await db
       .prepare(query)
       .bind(...params)
-      .all();
+      .all<Record<string, unknown>>();
 
     const tweets = results.results || [];
     const hasMore = tweets.length > limit;
@@ -84,5 +94,5 @@ export const timelineRoutes = new Hono<{ Bindings: Env; Variables: Variables }>(
       ? (items[items.length - 1] as { created_at: string }).created_at
       : null;
 
-    return c.json({ tweets: items, nextCursor });
+    return c.json({ tweets: parseTweetImages(items), nextCursor });
   });
