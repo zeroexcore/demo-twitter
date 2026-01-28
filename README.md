@@ -2,7 +2,14 @@
 
 A full-stack Twitter clone demonstrating the oxc tech stack.
 
-![Demo Twitter](https://via.placeholder.com/800x400?text=Demo+Twitter+Screenshot)
+![Demo Twitter](https://demo-twitter-cdn.oxc.workers.dev/screenshots/home.png)
+
+<details>
+<summary>Mobile View</summary>
+
+![Mobile](https://demo-twitter-cdn.oxc.workers.dev/screenshots/home-mobile.png)
+
+</details>
 
 ## Tech Stack
 
@@ -94,6 +101,7 @@ demo-twitter/
 │       │   └── lib/         # Utilities
 │       └── index.html
 ├── packages/
+│   ├── cdn/                 # Static assets (screenshots)
 │   ├── types/               # Shared TypeScript types
 │   └── utils/               # Shared utilities
 ├── turbo.json               # Turborepo config
