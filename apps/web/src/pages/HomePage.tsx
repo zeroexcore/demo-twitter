@@ -5,7 +5,7 @@ import ComposeTweet from "../components/ComposeTweet";
 import TweetList from "../components/TweetList";
 
 export default function HomePage() {
-  const { isAuthenticated, token } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   const {
     data,
@@ -14,11 +14,8 @@ export default function HomePage() {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["timeline", isAuthenticated ? "home" : "public"],
+    queryKey: ["timeline", "public"],
     queryFn: async ({ pageParam }) => {
-      if (isAuthenticated && token) {
-        return timelineApi.getHome(token, pageParam);
-      }
       return timelineApi.getPublic(pageParam);
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
@@ -28,10 +25,10 @@ export default function HomePage() {
   const tweets = data?.pages.flatMap((page) => page.tweets) ?? [];
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden dark:border-gray-800 dark:bg-gray-900">
       {/* Header */}
-      <div className="sticky top-14 z-10 border-b border-gray-200 bg-white/80 backdrop-blur-sm p-4">
-        <h1 className="text-xl font-bold">
+      <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
           {isAuthenticated ? "Home" : "Explore"}
         </h1>
       </div>

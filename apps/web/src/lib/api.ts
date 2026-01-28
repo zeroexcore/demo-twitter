@@ -1,4 +1,6 @@
-const API_BASE = "/api";
+// In production, use the API URL from env; in dev, use the Vite proxy
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
+const CDN_BASE = import.meta.env.VITE_CDN_URL || "https://demo-twitter-cdn.oxc.workers.dev";
 
 interface ApiOptions {
   method?: string;
@@ -59,11 +61,11 @@ export const authApi = {
 export const tweetsApi = {
   get: (id: string) => api<{ tweet: Tweet }>(`/tweets/${id}`),
 
-  create: (content: string, token: string) =>
-    api<{ tweet: Tweet }>("/tweets", { method: "POST", body: { content }, token }),
+  create: (content: string, token: string, images?: string[]) =>
+    api<{ tweet: Tweet }>("/tweets", { method: "POST", body: { content, images }, token }),
 
-  update: (id: string, content: string, token: string) =>
-    api<{ tweet: Tweet }>(`/tweets/${id}`, { method: "PUT", body: { content }, token }),
+  update: (id: string, content: string, token: string, images?: string[]) =>
+    api<{ tweet: Tweet }>(`/tweets/${id}`, { method: "PUT", body: { content, images }, token }),
 
   delete: (id: string, token: string) =>
     api<{ success: boolean }>(`/tweets/${id}`, { method: "DELETE", token }),
@@ -116,6 +118,27 @@ export const timelineApi = {
     ),
 };
 
+// CDN API (for image uploads)
+export const cdnApi = {
+  upload: async (file: File): Promise<{ url: string }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${CDN_BASE}/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new ApiError(response.status, data.error || "Upload failed");
+    }
+
+    return { url: data.url };
+  },
+};
+
 // Types
 export interface User {
   id: string;
@@ -140,6 +163,7 @@ export interface Tweet {
   id: string;
   user_id: string;
   content: string;
+  images: string[];
   created_at: string;
   updated_at: string;
   username: string;

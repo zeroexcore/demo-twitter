@@ -6,10 +6,12 @@ import { authMiddleware } from "../middleware/auth";
 
 const createTweetSchema = z.object({
   content: z.string().min(1).max(280),
+  images: z.array(z.string().url()).max(4).optional(),
 });
 
 const updateTweetSchema = z.object({
   content: z.string().min(1).max(280),
+  images: z.array(z.string().url()).max(4).optional(),
 });
 
 export const tweetRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
@@ -20,7 +22,8 @@ export const tweetRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
 
     const tweet = await db
       .prepare(
-        `SELECT t.*, u.username, u.display_name, u.avatar_url,
+        `SELECT t.id, t.user_id, t.content, t.images, t.created_at, t.updated_at,
+                u.username, u.display_name, u.avatar_url,
                 (SELECT COUNT(*) FROM likes WHERE tweet_id = t.id) as like_count,
                 (SELECT COUNT(*) FROM retweets WHERE tweet_id = t.id) as retweet_count
          FROM tweets t
@@ -28,43 +31,50 @@ export const tweetRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
          WHERE t.id = ?`
       )
       .bind(id)
-      .first();
+      .first<Record<string, unknown>>();
 
     if (!tweet) {
       return c.json({ error: "Tweet not found" }, 404);
     }
 
-    return c.json({ tweet });
+    // Parse images JSON
+    const images = tweet.images ? JSON.parse(tweet.images as string) : [];
+
+    return c.json({ tweet: { ...tweet, images } });
   })
   // Create a tweet (protected)
   .post("/", authMiddleware, zValidator("json", createTweetSchema), async (c) => {
-    const { content } = c.req.valid("json");
+    const { content, images = [] } = c.req.valid("json");
     const user = c.get("user");
     const db = c.env.DB;
 
     const id = crypto.randomUUID();
 
     await db
-      .prepare("INSERT INTO tweets (id, user_id, content) VALUES (?, ?, ?)")
-      .bind(id, user.id, content)
+      .prepare("INSERT INTO tweets (id, user_id, content, images) VALUES (?, ?, ?, ?)")
+      .bind(id, user.id, content, JSON.stringify(images))
       .run();
 
     const tweet = await db
       .prepare(
-        `SELECT t.*, u.username, u.display_name, u.avatar_url
+        `SELECT t.id, t.user_id, t.content, t.images, t.created_at, t.updated_at,
+                u.username, u.display_name, u.avatar_url
          FROM tweets t
          JOIN users u ON t.user_id = u.id
          WHERE t.id = ?`
       )
       .bind(id)
-      .first();
+      .first<Record<string, unknown>>();
 
-    return c.json({ tweet }, 201);
+    // Parse images JSON
+    const parsedImages = tweet?.images ? JSON.parse(tweet.images as string) : [];
+
+    return c.json({ tweet: { ...tweet, images: parsedImages } }, 201);
   })
   // Update a tweet (protected)
   .put("/:id", authMiddleware, zValidator("json", updateTweetSchema), async (c) => {
     const id = c.req.param("id");
-    const { content } = c.req.valid("json");
+    const { content, images = [] } = c.req.valid("json");
     const user = c.get("user");
     const db = c.env.DB;
 
@@ -84,22 +94,26 @@ export const tweetRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
 
     await db
       .prepare(
-        "UPDATE tweets SET content = ?, updated_at = datetime('now') WHERE id = ?"
+        "UPDATE tweets SET content = ?, images = ?, updated_at = datetime('now') WHERE id = ?"
       )
-      .bind(content, id)
+      .bind(content, JSON.stringify(images), id)
       .run();
 
     const tweet = await db
       .prepare(
-        `SELECT t.*, u.username, u.display_name, u.avatar_url
+        `SELECT t.id, t.user_id, t.content, t.images, t.created_at, t.updated_at,
+                u.username, u.display_name, u.avatar_url
          FROM tweets t
          JOIN users u ON t.user_id = u.id
          WHERE t.id = ?`
       )
       .bind(id)
-      .first();
+      .first<Record<string, unknown>>();
 
-    return c.json({ tweet });
+    // Parse images JSON
+    const parsedImages = tweet?.images ? JSON.parse(tweet.images as string) : [];
+
+    return c.json({ tweet: { ...tweet, images: parsedImages } });
   })
   // Delete a tweet (protected)
   .delete("/:id", authMiddleware, async (c) => {

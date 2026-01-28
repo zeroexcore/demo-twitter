@@ -1,0 +1,14 @@
+# Cloudflare Workers with static assets for demo-twitter web app
+name = "demo-twitter-web"
+compatibility_date = "2024-12-30"
+account_id = "733c505809a0c09542a27ef2923e895f"
+
+# Custom domain route
+routes = [
+  { pattern = "twitter-demo.oxc.dev", custom_domain = true }
+]
+
+# Static assets configuration
+[assets]
+directory = "dist"
+not_found_handling = "single-page-application"

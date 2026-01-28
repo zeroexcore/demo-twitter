@@ -1,0 +1,16 @@
+name = "demo-twitter-cdn"
+compatibility_date = "2024-01-01"
+account_id = "733c505809a0c09542a27ef2923e895f"
+main = "src/index.ts"
+
+# Static assets (screenshots)
+[assets]
+directory = "public"
+
+# R2 bucket for user uploads
+[[r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "demo-twitter-uploads"
+
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:5174,http://localhost:35173,https://demo-twitter-web.pages.dev"

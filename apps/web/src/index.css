@@ -2,12 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
   --color-primary: 59 130 246;
 }
 
 body {
   @apply bg-gray-50 text-gray-900 antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.dark body,
+body.dark {
+  @apply bg-gray-950 text-gray-100;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  @apply bg-gray-950 text-gray-100;
 }
 
 /* Mobile-first responsive design */

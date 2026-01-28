@@ -1,0 +1,153 @@
+-- Seed data for Demo Twitter
+-- Password for all users is "password123" (hashed with SHA-256 for demo)
+-- In production, use proper bcrypt hashing
+
+-- Demo Users (12 users with varied profiles)
+INSERT INTO users (id, username, email, password_hash, display_name, bio, avatar_url) VALUES
+  ('user_alice', 'alice', 'alice@demo.com', 'cGFzc3dvcmQxMjM=', 'Alice Johnson', 'Full-stack developer. Coffee enthusiast ☕ Building cool things with TypeScript.', ''),
+  ('user_bob', 'bob', 'bob@demo.com', 'cGFzc3dvcmQxMjM=', 'Bob Smith', 'Designer by day, coder by night. UI/UX passionate. Figma + Tailwind lover.', ''),
+  ('user_carol', 'carol', 'carol@demo.com', 'cGFzc3dvcmQxMjM=', 'Carol Williams', 'Tech lead at startup. Love open source. Rust enthusiast 🦀', ''),
+  ('user_dave', 'dave', 'dave@demo.com', 'cGFzc3dvcmQxMjM=', 'Dave Brown', 'DevOps engineer. Kubernetes fan. Cloud native advocate. ☁️', ''),
+  ('user_eve', 'eve', 'eve@demo.com', 'cGFzc3dvcmQxMjM=', 'Eve Davis', 'Product manager. Agile advocate. User-focused design thinking.', ''),
+  ('user_frank', 'frank', 'frank@demo.com', 'cGFzc3dvcmQxMjM=', 'Frank Miller', 'Backend engineer. Go & Rust. Building high-performance systems.', ''),
+  ('user_grace', 'grace', 'grace@demo.com', 'cGFzc3dvcmQxMjM=', 'Grace Lee', 'ML engineer. Python lover. Making AI accessible to everyone.', ''),
+  ('user_henry', 'henry', 'henry@demo.com', 'cGFzc3dvcmQxMjM=', 'Henry Chen', 'Mobile developer. React Native & Flutter. Cross-platform enthusiast.', ''),
+  ('user_iris', 'iris', 'iris@demo.com', 'cGFzc3dvcmQxMjM=', 'Iris Park', 'Security researcher. Bug bounty hunter. Ethical hacking advocate.', ''),
+  ('user_jack', 'jack', 'jack@demo.com', 'cGFzc3dvcmQxMjM=', 'Jack Wilson', 'Startup founder. Building the future of remote work. YC alum.', ''),
+  ('user_kate', 'kate', 'kate@demo.com', 'cGFzc3dvcmQxMjM=', 'Kate Martinez', 'Data scientist. SQL wizard. Turning data into insights.', ''),
+  ('user_leo', 'leo', 'leo@demo.com', 'cGFzc3dvcmQxMjM=', 'Leo Thompson', 'Open source maintainer. npm package author. TypeScript advocate.', '');
+
+-- Demo Tweets (30+ tweets with realistic content)
+INSERT INTO tweets (id, user_id, content, created_at) VALUES
+  ('tweet_1', 'user_alice', 'Just deployed my first Cloudflare Worker! The edge is amazing. Cold starts are basically non-existent. 🚀 #serverless #cloudflare', datetime('now', '-3 days')),
+  ('tweet_2', 'user_bob', 'Working on a new design system. Tailwind CSS v4 is looking incredible. The new CSS-first approach is exactly what we needed.', datetime('now', '-3 days', '+2 hours')),
+  ('tweet_3', 'user_carol', 'Code review tip: Focus on the logic, not the style. Let the linter handle formatting. Your team will move 10x faster.', datetime('now', '-2 days')),
+  ('tweet_4', 'user_alice', 'TanStack Query + Zustand is the perfect combo for React state management. No more Redux boilerplate! 
+
+Who else made the switch?', datetime('now', '-2 days', '+3 hours')),
+  ('tweet_5', 'user_dave', 'Kubernetes tip of the day: Always set resource limits on your pods. Your cluster will thank you. Trust me on this one. 🙏', datetime('now', '-2 days', '+6 hours')),
+  ('tweet_6', 'user_eve', 'User research is not optional. Talk to your users early and often. The product you think you''re building is rarely the product users need.', datetime('now', '-1 day', '-12 hours')),
+  ('tweet_7', 'user_bob', 'New blog post: "Why I switched from Figma to designing in code"
+
+TLDR: Faster iterations, real components, no handoff friction.', datetime('now', '-1 day', '-8 hours')),
+  ('tweet_8', 'user_carol', 'Open source maintainers deserve more recognition. If you use a library daily, consider sponsoring the maintainer. $5/month makes a difference.', datetime('now', '-1 day', '-4 hours')),
+  ('tweet_9', 'user_alice', 'Building a Twitter clone to learn the oxc stack. Hono + React + D1 is chef''s kiss! 👨‍🍳
+
+The DX is incredible. From zero to deployed in an afternoon.', datetime('now', '-1 day')),
+  ('tweet_10', 'user_dave', 'Hot take: YAML is fine. The problem is not the format, it''s the complexity of what we''re configuring. Simplify your architecture first.', datetime('now', '-20 hours')),
+  ('tweet_11', 'user_frank', 'Just hit 10,000 requests/second on my Go service with zero allocations in the hot path. Memory optimization is an art form.', datetime('now', '-18 hours')),
+  ('tweet_12', 'user_grace', 'Released my first open-source ML model today! A small language model trained on tech documentation. Link in thread. 🧵', datetime('now', '-16 hours')),
+  ('tweet_13', 'user_henry', 'React Native 0.76 with the new architecture is a game changer. The bridge is finally gone. Native performance is here.', datetime('now', '-14 hours')),
+  ('tweet_14', 'user_iris', 'Found a critical vulnerability in a major npm package. Responsible disclosure done, patch released. Always audit your dependencies!', datetime('now', '-12 hours')),
+  ('tweet_15', 'user_jack', 'We just closed our Series A! 🎉 Grateful for the team and investors who believed in us. Now the real work begins.', datetime('now', '-10 hours')),
+  ('tweet_16', 'user_kate', 'SQL tip: EXPLAIN ANALYZE is your best friend. That query taking 30 seconds? Probably a missing index. Found 5 today.', datetime('now', '-8 hours')),
+  ('tweet_17', 'user_leo', 'My npm package just hit 1 million weekly downloads! 📦 Started as a weekend project 2 years ago. OSS is incredible.', datetime('now', '-6 hours')),
+  ('tweet_18', 'user_alice', 'Spent the morning refactoring legacy code. Added types, tests, and documentation. Future me will be so grateful. 🙏', datetime('now', '-5 hours')),
+  ('tweet_19', 'user_bob', 'Design systems are not about components. They''re about shared language, consistent decisions, and faster shipping.', datetime('now', '-4 hours')),
+  ('tweet_20', 'user_carol', 'Mentored a junior dev today. Reminded me how far I''ve come. Everyone was a beginner once. Be patient, be kind.', datetime('now', '-3 hours')),
+  ('tweet_21', 'user_dave', 'GitOps is the way. Infrastructure as code, declarative configs, automated reconciliation. Sleep better at night.', datetime('now', '-2 hours', '-30 minutes')),
+  ('tweet_22', 'user_eve', 'Shipped a feature today based entirely on user feedback. Sometimes the best product work is just listening.', datetime('now', '-2 hours')),
+  ('tweet_23', 'user_frank', 'Benchmarked Rust vs Go for our use case. Rust won by 40%. Worth the learning curve? Absolutely.', datetime('now', '-1 hour', '-45 minutes')),
+  ('tweet_24', 'user_grace', 'Hot take: Most ML projects fail not because of the model, but because of bad data. Clean your data first.', datetime('now', '-1 hour', '-30 minutes')),
+  ('tweet_25', 'user_henry', 'Just shipped dark mode for our app. Took 2 hours with Tailwind. Should have done this months ago.', datetime('now', '-1 hour', '-15 minutes')),
+  ('tweet_26', 'user_iris', 'Security isn''t a feature. It''s a foundation. Build it in from day one, not as an afterthought.', datetime('now', '-1 hour')),
+  ('tweet_27', 'user_jack', 'Remote work tip: async communication > sync meetings. Your team will thank you.', datetime('now', '-45 minutes')),
+  ('tweet_28', 'user_kate', 'Data visualization is storytelling. Choose the right chart, and the data speaks for itself.', datetime('now', '-30 minutes')),
+  ('tweet_29', 'user_leo', 'TypeScript strict mode is not optional. The bugs it catches are worth the extra annotations.', datetime('now', '-15 minutes')),
+  ('tweet_30', 'user_alice', 'Loving how the tech community supports each other. Seen so many devs helping beginners today. ❤️', datetime('now', '-5 minutes'));
+
+-- Demo Follows (create a rich social graph)
+INSERT INTO follows (id, follower_id, following_id) VALUES
+  ('follow_1', 'user_alice', 'user_bob'),
+  ('follow_2', 'user_alice', 'user_carol'),
+  ('follow_3', 'user_alice', 'user_leo'),
+  ('follow_4', 'user_bob', 'user_alice'),
+  ('follow_5', 'user_bob', 'user_carol'),
+  ('follow_6', 'user_bob', 'user_grace'),
+  ('follow_7', 'user_carol', 'user_alice'),
+  ('follow_8', 'user_carol', 'user_dave'),
+  ('follow_9', 'user_carol', 'user_frank'),
+  ('follow_10', 'user_dave', 'user_alice'),
+  ('follow_11', 'user_dave', 'user_eve'),
+  ('follow_12', 'user_dave', 'user_frank'),
+  ('follow_13', 'user_eve', 'user_alice'),
+  ('follow_14', 'user_eve', 'user_carol'),
+  ('follow_15', 'user_eve', 'user_jack'),
+  ('follow_16', 'user_frank', 'user_carol'),
+  ('follow_17', 'user_frank', 'user_dave'),
+  ('follow_18', 'user_grace', 'user_alice'),
+  ('follow_19', 'user_grace', 'user_kate'),
+  ('follow_20', 'user_henry', 'user_bob'),
+  ('follow_21', 'user_henry', 'user_alice'),
+  ('follow_22', 'user_iris', 'user_carol'),
+  ('follow_23', 'user_iris', 'user_leo'),
+  ('follow_24', 'user_jack', 'user_eve'),
+  ('follow_25', 'user_jack', 'user_alice'),
+  ('follow_26', 'user_kate', 'user_grace'),
+  ('follow_27', 'user_kate', 'user_alice'),
+  ('follow_28', 'user_leo', 'user_alice'),
+  ('follow_29', 'user_leo', 'user_carol'),
+  ('follow_30', 'user_leo', 'user_iris');
+
+-- Demo Likes (varied engagement)
+INSERT INTO likes (id, user_id, tweet_id) VALUES
+  ('like_1', 'user_bob', 'tweet_1'),
+  ('like_2', 'user_carol', 'tweet_1'),
+  ('like_3', 'user_dave', 'tweet_1'),
+  ('like_4', 'user_alice', 'tweet_2'),
+  ('like_5', 'user_carol', 'tweet_2'),
+  ('like_6', 'user_dave', 'tweet_3'),
+  ('like_7', 'user_eve', 'tweet_3'),
+  ('like_8', 'user_frank', 'tweet_3'),
+  ('like_9', 'user_eve', 'tweet_4'),
+  ('like_10', 'user_henry', 'tweet_4'),
+  ('like_11', 'user_alice', 'tweet_5'),
+  ('like_12', 'user_frank', 'tweet_5'),
+  ('like_13', 'user_bob', 'tweet_6'),
+  ('like_14', 'user_jack', 'tweet_6'),
+  ('like_15', 'user_alice', 'tweet_7'),
+  ('like_16', 'user_carol', 'tweet_8'),
+  ('like_17', 'user_dave', 'tweet_9'),
+  ('like_18', 'user_eve', 'tweet_9'),
+  ('like_19', 'user_frank', 'tweet_9'),
+  ('like_20', 'user_grace', 'tweet_9'),
+  ('like_21', 'user_henry', 'tweet_9'),
+  ('like_22', 'user_alice', 'tweet_11'),
+  ('like_23', 'user_dave', 'tweet_11'),
+  ('like_24', 'user_alice', 'tweet_12'),
+  ('like_25', 'user_kate', 'tweet_12'),
+  ('like_26', 'user_bob', 'tweet_13'),
+  ('like_27', 'user_alice', 'tweet_13'),
+  ('like_28', 'user_carol', 'tweet_14'),
+  ('like_29', 'user_leo', 'tweet_14'),
+  ('like_30', 'user_alice', 'tweet_15'),
+  ('like_31', 'user_bob', 'tweet_15'),
+  ('like_32', 'user_carol', 'tweet_15'),
+  ('like_33', 'user_dave', 'tweet_15'),
+  ('like_34', 'user_eve', 'tweet_15'),
+  ('like_35', 'user_alice', 'tweet_17'),
+  ('like_36', 'user_carol', 'tweet_17'),
+  ('like_37', 'user_iris', 'tweet_17'),
+  ('like_38', 'user_bob', 'tweet_19'),
+  ('like_39', 'user_alice', 'tweet_19'),
+  ('like_40', 'user_alice', 'tweet_20'),
+  ('like_41', 'user_bob', 'tweet_25'),
+  ('like_42', 'user_alice', 'tweet_25'),
+  ('like_43', 'user_carol', 'tweet_29'),
+  ('like_44', 'user_alice', 'tweet_29'),
+  ('like_45', 'user_iris', 'tweet_29');
+
+-- Demo Retweets
+INSERT INTO retweets (id, user_id, tweet_id) VALUES
+  ('retweet_1', 'user_carol', 'tweet_1'),
+  ('retweet_2', 'user_dave', 'tweet_4'),
+  ('retweet_3', 'user_eve', 'tweet_8'),
+  ('retweet_4', 'user_frank', 'tweet_9'),
+  ('retweet_5', 'user_grace', 'tweet_12'),
+  ('retweet_6', 'user_henry', 'tweet_13'),
+  ('retweet_7', 'user_iris', 'tweet_14'),
+  ('retweet_8', 'user_jack', 'tweet_15'),
+  ('retweet_9', 'user_kate', 'tweet_15'),
+  ('retweet_10', 'user_leo', 'tweet_17'),
+  ('retweet_11', 'user_alice', 'tweet_20'),
+  ('retweet_12', 'user_bob', 'tweet_25');

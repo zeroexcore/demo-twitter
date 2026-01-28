@@ -52,7 +52,8 @@ export const userRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
     }
 
     let query = `
-      SELECT t.*, u.username, u.display_name, u.avatar_url,
+      SELECT t.id, t.user_id, t.content, t.images, t.created_at, t.updated_at,
+             u.username, u.display_name, u.avatar_url,
              (SELECT COUNT(*) FROM likes WHERE tweet_id = t.id) as like_count,
              (SELECT COUNT(*) FROM retweets WHERE tweet_id = t.id) as retweet_count
       FROM tweets t
@@ -73,7 +74,7 @@ export const userRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
     const results = await db
       .prepare(query)
       .bind(...params)
-      .all();
+      .all<Record<string, unknown>>();
 
     const tweets = results.results || [];
     const hasMore = tweets.length > limit;
@@ -82,7 +83,13 @@ export const userRoutes = new Hono<{ Bindings: Env; Variables: Variables }>()
       ? (items[items.length - 1] as { created_at: string }).created_at
       : null;
 
-    return c.json({ tweets: items, nextCursor });
+    // Parse images JSON for each tweet
+    const parsedTweets = items.map((tweet) => ({
+      ...tweet,
+      images: tweet.images ? JSON.parse(tweet.images as string) : [],
+    }));
+
+    return c.json({ tweets: parsedTweets, nextCursor });
   })
   // Update current user's profile (protected)
   .put("/me", authMiddleware, zValidator("json", updateProfileSchema), async (c) => {
