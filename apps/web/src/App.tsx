@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./stores/auth";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -17,44 +18,46 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <HomePage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/"
+          element={
             <Layout>
               <HomePage />
             </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/:username"
-        element={
-          <Layout>
-            <ProfilePage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/tweet/:id"
-        element={
-          <Layout>
-            <TweetPage />
-          </Layout>
-        }
-      />
-    </Routes>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <HomePage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:username"
+          element={
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/tweet/:id"
+          element={
+            <Layout>
+              <TweetPage />
+            </Layout>
+          }
+        />
+      </Routes>
+    </ErrorBoundary>
   );
 }
 
