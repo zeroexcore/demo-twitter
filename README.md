@@ -129,20 +129,41 @@ demo-twitter/
 
 ## Deployment
 
-### API (Cloudflare Workers)
+Deployments are automated via GitHub Actions on push to `main`.
+
+### Live URLs
+- **Web**: https://demo-twitter-web.pages.dev
+- **API**: https://demo-twitter-api.zeroexcore.workers.dev
+
+### Manual Deployment
+
+#### API (Cloudflare Workers)
 
 ```bash
 cd apps/api
 wrangler deploy
 ```
 
-### Web (Cloudflare Pages)
+#### Web (Cloudflare Pages)
 
 ```bash
 cd apps/web
 pnpm build
-wrangler pages deploy dist
+pnpm deploy
 ```
+
+### CI/CD Setup
+
+1. Create a Cloudflare API token with these permissions:
+   - Workers Scripts: Edit
+   - Pages: Edit
+   - D1: Edit
+
+2. Add the token as a GitHub secret:
+   - Name: `CLOUDFLARE_API_TOKEN`
+   - Value: Your API token
+
+3. Push to `main` to trigger deployment
 
 ## License
 

@@ -1,4 +1,5 @@
-const API_BASE = "/api";
+// In production, use the API URL from env; in dev, use the Vite proxy
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 interface ApiOptions {
   method?: string;
